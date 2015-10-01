@@ -50,18 +50,18 @@ f_bComparePoissonLiklihoodApply = function(ivVector, cutoff=0.2) {
 #       bPaired: boolean value, default is true. if data was single end read then set it false
 #                as in single end reads there are no first mate reads
 # Rets: a matrix N X 4 size (N being length of GRanges signal object)
-f_mFastCountMateReadsOverRanges = function(gr.signal, bam.file, bPaired=T){
+f_mFastCountMateReadsOverRanges = function(gr.signal, bam.file, bai.file, bPaired=T){
   # matrix to store return object
   mRets = matrix(NA, nrow=length(gr.signal), ncol=4, dimnames=list(NULL, c('mp', 'mm', 'bp', 'bm')))
   # set flag to read bam file first mates
   flag = scanBamFlag(isFirstMateRead=T)
-  if (bPaired){  bam = readGAlignmentsFromBam(bam.file, param=ScanBamParam(flag=flag, which=gr.signal))
+  if (bPaired){  bam = readGAlignments(bam.file, index=bai.file, param=ScanBamParam(flag=flag, which=gr.signal))
                  # how many reads align with + strand and - strands
                  mRets[,'mp'] = countOverlaps(gr.signal, bam[strand(bam)=='+'])
                  mRets[,'mm'] = countOverlaps(gr.signal, bam[strand(bam)=='-'])
   } #if
   # now read data coming from both mates 
-  bam = readGAlignmentsFromBam(bam.file, param=ScanBamParam(which=gr.signal))
+  bam = readGAlignments(bam.file, index=bai.file, param=ScanBamParam(which=gr.signal))
   # how many reads align with + strand and - strands
   mRets[,'bp'] = countOverlaps(gr.signal, bam[strand(bam)=='+'])
   mRets[,'bm'] = countOverlaps(gr.signal, bam[strand(bam)=='-'])
@@ -139,9 +139,9 @@ f_WriteGff3 = function(oGR){
 #       csFile = location of bam file, it assumes a bam index file is present
 #       bPaired = boolean value, set to true for paired end reads or else set to false 
 # Rets: a Granges object of MACS2 xls data
-f_oGRSeparateStrands = function(oGRsignal.strand, csFile, bPaired){
+f_oGRSeparateStrands = function(oGRsignal.strand, csFile, bai, bPaired){
   # count reads aligning to regions
-  mFirstMate = f_mFastCountMateReadsOverRanges(oGRsignal.strand, bam.file = csFile, bPaired)
+  mFirstMate = f_mFastCountMateReadsOverRanges(oGRsignal.strand, bam.file = csFile, bai, bPaired)
   mp = mFirstMate[,'mp'] + 1 # add a one to avoid zero probabilities and divisions by zero
   mm = mFirstMate[,'mm'] + 1
   n = mp + mm
