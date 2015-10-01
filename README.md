@@ -6,4 +6,5 @@ Requires bioconductor with the GenomicAlignments and GenomicFeatures packages;
 e.g.
 
 source("http://bioconductor.org/biocLite.R")
+
 biocLite(c("GenomicFeatures", "GenomicAlignments"))
