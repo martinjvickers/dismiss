@@ -31,7 +31,7 @@ oGRdismiss = f_oGRMACS2toGRanges(macs)
 oGRdismiss = f_oGRSeparateStrands(oGRdismiss, bam, bai, paired)
 
 # save output to granges object 
-name.out = paste('oGRdismiss_', make.names(date()), '.rds', sep='')
+name.out = paste('oGRdismiss.rds', sep='')
 save(oGRdismiss, file = name.out)
 
 # save output as gff3 files

@@ -119,15 +119,15 @@ f_WriteGff3 = function(oGR){
   library(rtracklayer)
   # write 3 gff files for *, + and - strand
   if (length(oGR[strand(oGR)=='*']) > 0){
-    name.out = paste('oGRdismiss_', make.names(date()), '_double_st.gff3', sep='')
+    name.out = paste('oGRdismiss_double_st.gff3', sep='')
     export(oGR[strand(oGR)=='*'], name.out, format='gff3')
   }  
   if (length(oGR[strand(oGR)=='+']) > 0){
-    name.out = paste('oGRdismiss_', make.names(date()), '_plus_st.gff3', sep='')
+    name.out = paste('oGRdismiss_plus_st.gff3', sep='')
     export(oGR[strand(oGR)=='+'], name.out)
   }  
   if (length(oGR[strand(oGR)=='-']) > 0){
-    name.out = paste('oGRdismiss_', make.names(date()), '_minus_st.gff3', sep='')
+    name.out = paste('oGRdismiss_minus_st.gff3', sep='')
     export(oGR[strand(oGR)=='-'], name.out, format='gff3')
   }
 } # function end 
