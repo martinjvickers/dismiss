@@ -1,0 +1,33 @@
+<tool id="dismiss" name="dismiss" version="0.1.0">
+	<requirements>
+	</requirements>
+	<stdio>
+		<exit_code range="1:" />
+	</stdio>
+	<command><![CDATA[
+		##Input files need to be bam and bai, so symlink them
+		ln -s "$input2" "$input2".bam &&
+		ln -s "$input3" "$input3".bai &&
+		/usr/local/bin/Rscript /usr/local/bin/dismiss/dismiss_macs2_extractor.R "$input1" "$input2".bam "$input3".bai "$seqtype" &&
+		rm "$input2".bam &&
+       		rm "$input3".bai
+	]]></command>
+	<inputs>
+		<param type="data" name="input1" format="xls" label="MACS2 xls"/>
+		<param type="data" name="input2" format="bam" label="BAM file"/>
+		<param type="data" name="input3" format="bai" label="BAM index file"/>
+		<param name="seqtype" type="select" label="Sequence data (paired or single end)">
+		<option value="p">Paired-End</option>
+		<option value="s">Single-End</option>
+		</param>
+	</inputs>
+	<outputs>
+		<data name="output1" format="rds" from_work_dir="oGRdismiss.rds" />
+		<data name="output2" format="gff3" from_work_dir="oGRdismiss_double_st.gff3" />
+		<data name="output3" format="gff3" from_work_dir="oGRdismiss_plus_st.gff3" />
+		<data name="output4" format="gff3" from_work_dir="oGRdismiss_minus_st.gff3" />
+	</outputs>
+	<help><![CDATA[
+		TODO: Fill in help.
+	]]></help>
+</tool>
